@@ -1,0 +1,42 @@
+_BASE_: Base-PointRend-Semantic-FPN.yaml
+MODEL:
+  WEIGHTS: detectron2://ImageNetPretrained/MSRA/R-101.pkl
+  RESNETS:
+    DEPTH: 101
+  SEM_SEG_HEAD:
+    NUM_CLASSES: 2 # todo: dummy class to compute uncertainty?
+  POINT_HEAD:
+    NUM_CLASSES: 2
+    SUBDIVISION_STEPS: 5
+    TRAIN_NUM_POINTS: 512
+    SUBDIVISION_NUM_POINTS: 1024
+DATASETS:
+  TRAIN: ("large_hair_train",)
+  TEST: ("large_hair_val",)
+SOLVER:
+  WARMUP_FACTOR: 0.001
+  WARMUP_ITERS: 100
+  WARMUP_METHOD: linear
+  BASE_LR: 0.02
+  BIAS_LR_FACTOR: 1.0
+  CHECKPOINT_PERIOD: 250
+  STEPS: (1000, 6000, 8000)
+  MAX_ITER: 10000
+  IMS_PER_BATCH: 16
+INPUT:
+  # MIN_SIZE_TRAIN: (512, 768, 1024, 1280, 1536, 1792, 2048)
+  MIN_SIZE_TRAIN: (512, 768, )
+  MIN_SIZE_TRAIN_SAMPLING: "choice"
+  MAX_SIZE_TRAIN: 1024
+  MIN_SIZE_TEST: 1024
+  MAX_SIZE_TEST: 2048
+  # CROP:
+  #   ENABLED: True
+  #   TYPE: "absolute"
+  #   SIZE: (512, 1024)
+  #   SINGLE_CATEGORY_MAX_AREA: 0.85
+  COLOR_AUG_SSD: True
+DATALOADER:
+  NUM_WORKERS: 4
+
+OUTPUT_DIR: ./output_seg_faster
