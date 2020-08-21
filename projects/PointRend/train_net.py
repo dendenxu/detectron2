@@ -280,7 +280,7 @@ def register_hair():
             from functools import partial
             loader = partial(get_hair_dicts_f, type_path, d, dataset_name, class_name)
             DatasetCatalog.register(name_prefix, loader)
-            MetadataCatalog.get(name_prefix).set(thing_classes=[class_name])
+            MetadataCatalog.get(name_prefix).set(thing_classes=[class_name], stuff_classes=[class_name, "non_"+class_name])
 
 
 if __name__ == "__main__":
